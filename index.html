@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HotSparks | Premium News Matrix & Aggregator</title>
+    
+    <meta name="description" content="A premium, ultra-responsive dynamic country-wise news and media matrix dashboard.">
+    <meta name="keywords" content="news portal, premium aggregator, global news matrix">
+    <meta name="robots" content="index, follow">
+
+    <!-- TailwindCSS CDN (Preflight disabled to protect your existing custom CSS) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        corePlugins: {
+          preflight: false,
+        }
+      }
+    </script>
+
+    <style>
+        /* --- CSS VARIABLES & THEMES --- */
+        :root {
+            --bg-base: #f8fafc;
+            --bg-surface: rgba(255, 255, 255, 0.8);
+            --bg-surface-solid: #ffffff;
+            --border-color: rgba(226, 232, 240, 0.8);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent-primary: #6366f1;
+            --accent-hover: #4f46e5;
+            --glass-blur: 20px;
+            --glass-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.06);
+            --radius-sm: 10px;
+            --radius-md: 20px;
+            --radius-lg: 35px;
+            --radius-square: 0px; 
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg-base: #090d16;
+            --bg-surface: rgba(15, 23, 42, 0.8);
+            --bg-surface-solid: #151f32;
+            --border-color: rgba(51, 65, 85, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --accent-primary: #818cf8;
+            --accent-hover: #6366f1;
+            --glass-shadow: 0 15px 45px -10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- BASE STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-sans);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 5% 10%, rgba(99, 102, 241, 0.04) 0%, transparent 35%),
+                              radial-gradient(circle at 95% 80%, rgba(236, 72, 153, 0.04) 0%, transparent 35%);
+            background-attachment: fixed;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; border: none; background: none; outline: none; transition: var(--transition-smooth); }
+        img { max-width: 100%; height: auto; display: block; object-fit: cover; }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .glass {
+            background: var(--bg-surface);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--border-color);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .glass-solid {
+            background: var(--bg-surface-solid);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--glass-shadow);
+            transition: var(--transition-smooth);
+        }
+
+        /* --- HEADER --- */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 99;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .header-site-links, .footer-site-links {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+        
+        .header-site-links a, .footer-site-links a { 
+            transition: var(--transition-smooth); 
+            display: inline-block;
+        }
+        .header-site-links a:hover, .footer-site-links a:hover { 
+            color: var(--accent-primary); 
+            transform: translateX(3px); 
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            background: linear-gradient(to right, var(--accent-primary), #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- AUTH BUTTONS --- */
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .btn-login, .btn-signup {
+            padding: 10px 20px;
+            border-radius: var(--radius-lg);
+            font-weight: 800;
+            font-size: 13px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-login {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        .btn-signup {
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        }
+        .btn-login:hover, .btn-signup:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+        }
+
+        .date-engine {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+            line-height: 1.2;
+            border-left: 3px solid var(--accent-primary);
+            padding-left: 12px;
+        }
+
+        .date-day { font-size: 14px; font-weight: 800; color: var(--accent-primary); text-transform: uppercase; }
+        .date-full { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+
+        .header-controls { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .theme-toggle {
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- BREAKING NEWS TICKER --- */
+        .ticker-wrapper {
+            display: flex;
+            align-items: center;
+            background: var(--bg-surface-solid);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: var(--glass-shadow);
+            height: 44px;
+        }
+
+        .ticker-title {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: #ffffff;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            z-index: 5;
+        }
+
+        .ticker-text-wrapper {
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .ticker-text-move {
+            display: inline-flex;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: tickerMove 45s linear infinite;
+            will-change: transform;
+        }
+
+        .ticker-item {
+            padding-right: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+        }
+        .ticker-item::before { content: "•"; margin-right: 12px; color: #ef4444; font-size: 18px; }
+
+        @keyframes tickerMove {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        .ticker-text-wrapper:hover .ticker-text-move { animation-play-state: paused; }
+
+        /* Headline Banner */
+        .center-headline-container { text-align: center; margin: 25px 0; }
+        .center-headline {
+            font-size: 36px; font-weight: 900; letter-spacing: -1.5px; line-height: 1.2;
+            background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-primary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px;
+        }
+
+        /* --- AD CONTAINERS --- */
+        .ad-container {
+            margin: 20px auto; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            width: 100%; 
+            max-width: 100%; 
+            min-height: 90px;
+            border: 1px dashed var(--border-color); 
+            background: rgba(148, 163, 184, 0.02);
+            border-radius: var(--radius-sm); 
+            position: relative; 
+            overflow: hidden;
+            overflow-x: auto;
+        }
+
+        .section-title {
+            font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 24px; display: flex; align-items: center; gap: 10px;
+            color: var(--text-primary);
+        }
+        .section-title::after { content: ''; flex-grow: 1; height: 1px; background: var(--border-color); }
+
+        /* --- SEARCH BAR --- */
+        .search-container {
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 300px;
+            margin-left: 0; 
+            position: relative;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            fill: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 44px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            background: var(--bg-surface-solid);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-weight: 500;
+            box-shadow: var(--glass-shadow);
+            transition: var(--transition-smooth);
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        /* --- GRID DESIGN --- */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Card */
+        .category-card {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--glass-shadow);
+            background: var(--bg-surface-solid);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        .category-card:hover {
+            z-index: 10;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.3);
+        }
+
+        /* --- PAGINATION STYLES --- */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        .page-num, .page-next {
+            background: var(--bg-surface-solid);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: var(--glass-shadow);
+            font-size: 14px;
+        }
+        .page-num:hover, .page-next:hover {
+            background: var(--accent-primary);
+            color: #ffffff;
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+        .page-num.active {
+            background: var(--accent-primary);
+            color: #ffffff;
+            border-color: var(--accent-primary);
+        }
+        .page-next {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            border: none;
+        }
+
+        /* --- SLIDESHOW STYLES --- */
+        .slideshow-container {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background-color: #0f172a; 
+            display: grid;
+            aspect-ratio: 4 / 5; 
+            cursor: pointer;
+        }
+
+        .slide-image {
+            grid-area: 1 / 1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1);
+            will-change: opacity, transform;
+        }
+        
+        .slide-image.active {
+            opacity: 1;
+            transform: scale(1.05);
+            z-index: 1;
+        }
+
+        .category-content { 
+            position: absolute; 
+            bottom: 0; left: 0; right: 0; 
+            padding: 40px 15px 15px 15px; 
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.7) 60%, rgba(15, 23, 42, 0) 100%);
+            z-index: 3; 
+            pointer-events: none;
+        }
+
+        /* Active Dot & Title Styles */
+        .active-status-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        
+        .category-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        
+        .active-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(14, 165, 233, 0.8);
+            animation: pulse-dot 1s infinite;
+        }
+        
+        .active-text {
+            color: #22c55e;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        @keyframes pulse-dot {
+            0% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(14, 165, 233, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
+        }
+        
+        .category-icon { font-size: 16px; }
+        .category-title { font-size: 17px; font-weight: 800; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        
+        .category-details {
+            font-size: 11px;
+            color: #cbd5e1;
+            font-weight: 500;
+            padding-left: 14px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* --- UPDATED CARD ACTION BUTTONS --- */
+        .card-action-buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 6px;
+            background: var(--bg-surface-solid);
+            border-top: 1px solid var(--border-color);
+            position: relative;
+            z-index: 5;
+        }
+
+        .card-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 7px 4px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 10px;
+            color: #ffffff;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .card-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+        .card-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            filter: brightness(1.2);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        /* --- FOOTER NETWORK HUB --- */
+        .footer-wrapper { padding: 30px 0; border-top: 1px solid var(--border-color); margin-top: 5px; }
+        .footer-container { display: grid; grid-template-columns: 1fr; text-align: center; gap: 24px; }
+        .footer-left { font-size: 13px; color: var(--text-muted); grid-row: 2; }
+        .footer-right-hub { display: flex; flex-direction: column; align-items: center; gap: 10px; grid-row: 1; }
+        
+        .hub-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.8px; }
+        .hub-networks-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 400px; }
+        .network-item {
+            width: 34px; height: 34px; border-radius: 50%; background: var(--bg-surface-solid);
+            border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--glass-shadow); transition: var(--transition-smooth);
+        }
+        .network-item:hover { 
+            transform: translateY(-5px) scale(1.15); 
+            border-color: var(--accent-primary); 
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4); 
+        }
+        .network-item img { width: 18px; height: 18px; }
+
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 24px; width: 46px; height: 46px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; z-index: 90; color: var(--text-primary);
+        }
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+
+        /* --- RESPONSIVE ENGINE --- */
+        @media(max-width: 1400px) { .category-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media(max-width: 1024px) {
+            .center-headline { font-size: 30px; }
+            .category-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media(max-width: 768px) {
+            .center-headline { font-size: 24px; }
+            .header-top { flex-direction: column; gap: 12px; }
+            .header-left { align-items: center; text-align: center; }
+            .header-site-links { justify-content: center; }
+            .header-controls { justify-content: center; width: 100%; }
+            .date-engine { text-align: center; border-left: none; padding-left: 0; }
+            .category-grid { grid-template-columns: repeat(2, 1fr); }
+            .search-container { margin-left: auto; margin-right: auto; max-width: 100%; }
+        }
+        @media(max-width: 480px) { .category-grid { grid-template-columns: repeat(1, 1fr); } }
+
+        /* --- SECOND LANDING PAGE / CUSTOM LOADING OVERLAY CSS --- */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(9, 13, 22, 0.94);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .loading-content-box {
+            background: #ffffff;
+            color: #000000;
+            font-family: 'Times New Roman', sans-serif;
+            text-align: center;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .disclaimer-desc {
+            font-size: 12px;
+            margin: 20px 0 30px 0;
+            color: #000 !important;
+            line-height: 1.5;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 6px solid #ccc;
+            border-top: 6px solid #3BA30D;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        #countdown {
+            font-size: 25px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        #extra-msg {
+            font-size: 15px;
+            color: #555 !important;
+            margin-top: 8px;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="glass">
+        <div class="container">
+            <div class="header-top">
+                <div class="header-left">
+                    <a href="/" class="logo">
+                        <svg style="width:26px; height:26px; fill:var(--accent-primary);" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                        HotSparks
+                    </a>
+                    <nav class="header-site-links" id="headerLinksPipeline"></nav>
+                </div>
+                
+                <div class="header-controls">
+                    <div class="auth-buttons">
+                        <a href="https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8" id="customLoginBtn" class="btn-login">Login</a>
+                        <a href="https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8" id="customSignupBtn" class="btn-signup">Create Free Account</a>
+                    </div>
+
+                    <div class="date-engine">
+                        <span id="weekdayDisplay" class="date-day">-</span>
+                        <span id="gregorianDisplay" class="date-full">-</span>
+                    </div>
+
+                    <button class="theme-toggle glass-solid" id="themeToggleBtn" aria-label="Toggle Theme">
+                        <svg class="sun-icon" style="width:20px; height:20px; stroke:var(--text-primary); stroke-width:2; fill:none; display:none;" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="moon-icon" style="width:20px; height:20px; stroke:var(--text-primary); stroke-width:2; fill:none;" viewBox="0 0 24 24">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- NEWS TICKER -->
+    <div class="container">
+        <div class="ticker-wrapper">
+            <div class="ticker-title">LIVE UPDATES</div>
+            <div class="ticker-text-wrapper">
+                <div class="ticker-text-move" id="breakingTickerPipeline"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BANNER / NATIVE AD SLOT 1 (Top / Headliner) -->
+    <div class="container">
+        <div class="ad-container" id="ad-slot-1">
+            <script>
+            atOptions = {
+                'key' : '333161345cd3bddcae6fb4659b28d162',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+            </script>
+            <script src="https://www.highperformanceformat.com/333161345cd3bddcae6fb4659b28d162/invoke.js"></script>
+        </div>
+    </div>
+
+    <div class="center-headline-container">
+        <h1 class="center-headline">"Connect Instantly. Live Chat Freely. Meet Real❤️ People Live."</h1>
+        <p style="color: var(--text-secondary); font-weight: 500; font-size: 14px;">💬 Enjoy real-time conversations with verified members in a friendly environment. Meet new people and create meaningful connections.</p>
+    </div>
+
+    <main class="container">
+        <div id="homeLandingPage">
+            <h2 class="section-title">Available Live Free</h2>
+            
+            <div class="search-container">
+                <svg class="search-icon" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search Name...">
+            </div>
+
+            <div class="category-grid" id="grid-part-1"></div>
+            
+            <div class="ad-container" id="ad-slot-2">
+                <script>
+                atOptions = {
+                    'key' : '333161345cd3bddcae6fb4659b28d162',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+                </script>
+                <script src="https://www.highperformanceformat.com/333161345cd3bddcae6fb4659b28d162/invoke.js"></script>
+            </div>
+
+            <div class="category-grid" id="grid-part-2"></div>
+            
+            <div class="ad-container" id="ad-slot-3">
+                <script>
+                atOptions = {
+                    'key' : '333161345cd3bddcae6fb4659b28d162',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+                </script>
+                <script src="https://www.highperformanceformat.com/333161345cd3bddcae6fb4659b28d162/invoke.js"></script>
+            </div>
+
+            <div class="category-grid" id="grid-part-3"></div>
+
+            <div class="ad-container" id="ad-slot-4">
+                <script async="async" data-cfasync="false" src="https://pl28837871.effectivecpmnetwork.com/a42710cbc275532005aa72c80ea3aa31/invoke.js"></script>
+                <div id="container-a42710cbc275532005aa72c80ea3aa31"></div>
+            </div>
+
+            <div class="category-grid" id="grid-part-4"></div>
+            
+            <div class="ad-container" id="ad-slot-5">
+                <script>
+                atOptions = {
+                    'key' : '333161345cd3bddcae6fb4659b28d162',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+                </script>
+                <script src="https://www.highperformanceformat.com/333161345cd3bddcae6fb4659b28d162/invoke.js"></script>
+            </div>
+
+            <div class="category-grid" id="grid-part-5"></div>
+            
+            <div class="ad-container" id="ad-slot-6">
+                <script>
+                atOptions = {
+                    'key' : '333161345cd3bddcae6fb4659b28d162',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+                </script>
+                <script src="https://www.highperformanceformat.com/333161345cd3bddcae6fb4659b28d162/invoke.js"></script>
+            </div>
+
+            <div class="category-grid" id="grid-part-6"></div>
+
+            <div class="ad-container" id="ad-slot-7">
+                <script>
+                atOptions = {
+                    'key' : '333161345cd3bddcae6fb4659b28d162',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+                </script>
+                <script src="https://www.highperformanceformat.com/333161345cd3bddcae6fb4659b28d162/invoke.js"></script>
+            </div>
+
+            <div class="category-grid" id="grid-part-7"></div>
+            
+            <div id="paginationPipeline" class="pagination-container"></div>
+        </div>
+    </main>
+
+    <!-- SECOND LANDING PAGE (LOADING PAGE OVERLAY) -->
+    <div id="secondLandingPage" class="loading-overlay">
+        <div class="loading-content-box">
+            <!-- HEADER -->
+            <div class="disclaimer-header">
+                <span class="header-title text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-3xl font-extrabold tracking-wide drop-shadow-md">Welcome To HotSparks!</span>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="disclaimer-desc">
+               * This verified profile guarantees a 100% secure and risk-free environment for authentic connections.
+* Engage confidently in private, real-time conversations with complete absolute peace of mind.
+            </div>
+
+            <!-- LOADER -->
+            <div class="spinner"></div>
+
+            <h2>Preparing...</h2>
+
+            <p>👉🏽 In This Only <span id="countdown">05</span> Seconds.</p>
+
+            <p id="extra-msg">Please wait...</p>
+        </div>
+    </div>
+
+    <footer class="footer-wrapper">
+        <div class="container footer-container">
+            <div class="footer-left">
+                <p>Copyright &copy; <span id="autoYear"></span> | <a href="javascript:void(0)" onclick="triggerRedirect('https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8')" style="color:var(--accent-primary); font-weight: bold; cursor: pointer;">HotSparks❤️</a> All Rights Reserved.</p>
+            </div>
+            <div class="footer-right-hub">
+                <span class="hub-title">Quick Connected Networks</span>
+                <div class="hub-networks-grid" id="footerSocialNetworksPipeline"></div>
+                <nav class="footer-site-links" id="footerLinksPipeline"></nav>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top glass-solid" id="backToTopFab" aria-label="Scroll to top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+        <svg style="width:18px; height:18px; fill:currentColor;" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+    </button>
+
+    <script>
+        //<![CDATA[
+        
+        const USER_CONFIG = {
+            personalLinks: {
+                loginLink: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8",
+                signupLink: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8"
+            },
+            ads: {
+                enablePopunder: false,
+                popunderUrl: "https://www.effectivecpmnetwork.com/আপনার-পপআন্ডার-লিংক-এখানে"
+            }
+        };
+
+        const DATABASE = {
+            settings: { activeText: "online" },
+            speedSettings: {
+                tickerDuration: "95s",
+                slideshowBaseSpeed: 7000, 
+                slideshowRandomDelay: 1000
+            },
+
+            sitePages: [
+                { name: "Privacy Policy", url: "https://sites.google.com/view/privacy-and-policy69/home" },
+                { name: "FAQ", url: "https://sites.google.com/view/faq9/home" },
+                { name: "Disclaimer", url: "https://sites.google.com/view/disclaimer69/home" },
+                { name: "Terms & Conditions", url: "https://sites.google.com/view/terms-and-conditions69/home" },
+                { name: "About Us", url: "https://sites.google.com/view/about-us-69/home" }, 
+                { name: "Contact Us", url: "https://sites.google.com/view/contact-us-69/home" }
+            ],
+
+            categories: [
+                { id: "Ruth Ellis", name: "Ruth Ellis", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/YwwXvrQ/b8670a11875885e18d887fcf3ab34cfd-f.jpg"] },
+
+                { id: "Noa Bennett", name: "Noa Bennett", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/rRDCJZGC/665a6e626c3f49a5a89e86e185fc5da4-f.jpg"] },
+
+                { id: "Lara Evans", name: "Lara Evans", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/kg2xb3XF/1929a9bcc61e0e147fca3a7fcc43d0d0-f.jpg"] },
+
+                { id: "Eliza Johnson", name: "Eliza Johnson", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/gZ8jGqCz/9f38e743a79deee6ef563b433ab0c564-f.jpg"] },
+
+                { id: "Freya Rose", name: "Freya Rose", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/1fmGCLq0/9d23d97e5262a1412a8d8d545a39185b-f.jpg"] },
+
+                { id: "Helen Zelaya", name: "Helen Zelaya", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/Qvj0r6Km/9ce6324753b4ad03597c29bc3315ce1e-f.jpg"] },
+
+                { id: "Lisa Wilson", name: "Lisa Wilson", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/nN0hY49X/9ba4669d1244eee48618a2125ebc1d47-f.jpg"] },
+
+                { id: "Juno Clark", name: "Juno Clark", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "",images: ["https://i.ibb.co.com/60Ssbbm4/1c7505aeb5144e63dd03885105fcbe71-f.jpg"] },
+
+                { id: "Rose Mery", name: "Rose Mery", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/v6fk4RVM/2a555c9279dc3e943c276d16cbee8f88-f.jpg"] },
+
+                { id: "Mellissa Rose", name: "Mellissa Rose", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/JVpGMsb/5c3d98b1b374058d1f0200949f990143-f.jpg"] },
+
+                { id: "Emily Chloe", name: "Emily Chloe", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/GzcrjRS/6e1a39f283f42953ee2292b9e03287ca-f.jpg"] },
+
+                { id: "Eva Quinn", name: "Eva Quinn", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/s9n10y3p/508b32445aa5c25c5adeb3c88515ee58-f.jpg"] },
+
+                { id: "Natalia Hannah", name: "Natalia Hannah", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/SXNfCkQf/defca82911b61bd8f3a4392cb7c7246c-f.jpg"] },
+
+
+
+
+
+                { id: "Mira Stone", name: "Mira Stone", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/Mx2xkrsy/SAVE-20260913-173301.jpg"] },
+
+                { id: "Lila Shaw", name: "Lila Shaw", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/tTMNxVj0/SAVE-20260913-173127.jpg"] },
+
+                { id: "Nora Quinn", name: "Nora Quinn", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/wFwPzdTT/SAVE-20260913-173220.jpg"] },
+
+                { id: "Iris Moore", name: "Iris Moore", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/NdBVd7Hf/a2541ff742e11b0a741523c50fdc2c7a-f.jpg"] },
+
+                { id: "Faye Scott", name: "Faye Scott", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/8kNdzZF/1785920451.webp"] },
+
+                { id: "Eden Price", name: "Eden Price", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/yn1FTtcL/IMG-5440.jpg"] },
+
+                { id: "Skye Grant", name: "Skye Grant", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/WvFsF6hT/hornyafricangirl-1785919440.webp"] },
+
+                { id: "Rose Hunt", name: "Rose Hunt", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "",images: ["https://i.ibb.co.com/TMDM4wgd/fc0b253c76096a464c0a26fb3d62ec20-f.jpg"] },
+
+                { id: "Demi Stone", name: "Demi Stone", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/60VQvVQ0/ce1461c2bfdcbb26865a8ac46edee9c2-f.jpg"] },
+
+                { id: "Cora Hill", name: "Cora Hill", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/5PyVRxV/b406d3fdbd38db5e8b99176d2e26b1d5-f.jpg"] },
+
+                { id: "Zoya Cole", name: "Zoya Cole", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/zh994qnw/a9aa2f31440b8c5055616b7ee81b87a3-f.jpg"] },
+
+                { id: "Zuri Allen", name: "Zuri Allen", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/ymMMHHPW/78699249-007-96a8.jpg"] },
+
+                { id: "Luna Hayes", name: "Luna Hayes", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/7tBYhCPW/c65fe4c4118c872733c66148676fae39-f.jpg"] },
+
+
+
+
+
+                { id: "Mya Collins", name: "Mya Collins", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/BK44hgsn/SAVE-20260913-173056.jpg"] },
+
+                { id: "Ines Kelly", name: "Ines Kelly", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/GDhhvQD/SAVE-20260913-172933.jpg"] },
+
+                { id: "Kali Young", name: "Kali Young", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/fVsCfQyv/SAVE-20260913-172828.jpg"] },
+
+                { id: "Lacy Brown", name: "Lacy Brown", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/WW4f12TH/SAVE-20260913-172840.jpg"] },
+
+                { id: "Ivy Dean", name: "Ivy Dean", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/dJbSMbw8/SAVE-20260913-172853.jpg"] },
+
+                { id: "Pia Grant", name: "Pia Grant", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/SYL7KvT/SAVE-20260913-172912.jpg"] },
+
+                { id: "Etta Cole", name: "Etta Cole", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/b5HqChd7/IMG-20260913-015654-380.jpg"] },
+
+                { id: "Demi Wells", name: "Demi Wells", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "",images: ["https://i.ibb.co.com/20Kf6ZR8/IMG-20260913-015654-303.jpg"] },
+
+                { id: "Zela Quinn", name: "Zela Quinn", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/6c7wcTcK/IMG-20260913-015654-952.jpg"] },
+
+                { id: "Nomi Price", name: "Nomi Price", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/kgXMtGY6/IMG-20260913-015654-591.jpg"] },
+
+                { id: "Arielle Moss", name: "Arielle Moss", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/zhdWwCPL/IMG-20260913-015654-254.jpg"] },
+
+                { id: "Zariah Dalton", name: "Zariah Dalton", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/bgDjcNGt/IMG-20260913-015654-138.jpg"] },
+
+                { id: "Marlowe Reeves", name: "Marlowe Reeves", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/sdrwWhLM/SAVE-20260913-173336.jpg"] },
+
+
+
+
+
+
+{ id: "Elowen Sinclair", name: "Elowen Sinclair", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/Xfyzx5dg/SAVE-20260913-172804.jpg"] },
+
+                { id: "Dahlia Reeves", name: "Dahlia Reeves", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/8n37N724/SAVE-20260913-172754.jpg"] },
+
+                { id: "Harlow Pierce", name: "Harlow Pierce", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/qFWHpJPc/SAVE-20260913-172740.jpg"] },
+
+                { id: "Willow Mercer", name: "Willow Mercer", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/wrc2D1BT/SAVE-20260913-172616.jpg"] },
+
+                { id: "Fallon Brooks", name: "Fallon Brooks", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/qMxDd8TT/SAVE-20260913-172635.jpg"] },
+
+                { id: "Margaux Ellis", name: "Margaux Ellis", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/5Xtr2mrf/SAVE-20260913-172650.jpg"] },
+
+                { id: "Flora Ramsey", name: "Flora Ramsey", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/PGvWr6vj/SAVE-20260913-172716.jpg"] },
+
+                { id: "Faye Hollis", name: "Faye Hollis", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "",images: ["https://i.ibb.co.com/3mqgdX2Q/SAVE-20260913-172551.jpg"] },
+
+                { id: "Smath Dolly", name: "Smath Dolly", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/zCtcTfy/SAVE-20260913-172538.jpg"] },
+
+                { id: "Mia lily", name: "Mia lily", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/pBDb0HG3/SAVE-20260913-173137.jpg"] },
+
+                { id: "Nia Langley", name: "Nia Langley", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/NddJjn0x/SAVE-20260913-173150.jpg"] },
+
+                { id: "Ayla Fletcher", name: "Ayla Fletcher", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/Kcbx3x8v/SAVE-20260913-173201.jpg"] },
+
+                { id: "Noemi Dawson", name: "Noemi Dawson", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/WNdBBFZZ/SAVE-20260913-173117.jpg"] },
+
+
+
+
+
+                { id: "Eliora Hayes", name: "Eliora Hayes", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/MyLLsV9T/SAVE-20260913-172029.jpg"] },
+
+                { id: "Elodie Murray", name: "Elodie Murray", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/zhSc8tV6/SAVE-20260913-172525.jpg"] },
+
+                { id: "Margot Finley", name: "Margot Finley", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/N2ZzRb9w/SAVE-20260913-172502.jpg"] },
+
+                { id: "Flora Ramsey", name: "Flora Ramsey", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/0ybtvybz/SAVE-20260913-172338.jpg"] },
+
+                { id: "Kaia Sterling", name: "Kaia Sterling", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/21mnYYRb/SAVE-20260913-172357.jpg"] },
+
+                { id: "Faye Hollis", name: "Faye Hollis", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/Q775133v/SAVE-20260913-172428.jpg"] },
+
+                { id: "Nola Kingsley", name: "Nola Kingsley", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/9kQg326R/SAVE-20260913-172442.jpg"] },
+
+                { id: "Lilia Prescott", name: "Lilia Prescott", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "",images: ["https://i.ibb.co.com/HLq8t9Tz/SAVE-20260913-172326.jpg"] },
+
+                { id: "Orla Huxley", name: "Orla Huxley", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/HDdFVG3H/SAVE-20260913-172310.jpg"] },
+
+                { id: "Saskia Palmer", name: "Saskia Palmer", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/RFfJkkY/SAVE-20260913-172155.jpg"] },
+
+                { id: "Lydia Hartley", name: "Lydia Hartley", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/Q7CH1gjX/SAVE-20260913-172135.jpg"] },
+
+                { id: "Eliza Thornton", name: "Eliza Thornton", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/Wpz1bQ2F/SAVE-20260913-172815.jpg"] },
+
+                { id: "Alayah Rhodes", name: "Alayah Rhodes", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/pBbVjh9t/SAVE-20260913-172110.jpg"] }
+
+            ],
+
+            tickerItems: [
+                "Welcome to HotSparks – Hundreds of active members joining today and Enjoy seamless 24/7 live connections and real-time chat completely free.",
+                "Your privacy and data security are always our top priority. Explore newly updated profiles and stay connected instantly.",
+                "Fast, reliable, and premium network experience for everyone and Verified profiles updated in real-time for an authentic connection experience.",
+                "Discover vibrant conversations and connect with like-minded individuals and Instant messaging enabled — start chatting in just one click!",
+                "Safe, respectful, and friendly environment guaranteed for all users and Experience ultra-fast load times and smooth dynamic browsing.",
+                "New interactive features are now live — check them out today!"
+            ],
+
+            socialLinks: [
+                { name: "Facebook", icon: "https://img.icons8.com/color/48/facebook-new.png", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8" },
+                { name: "YouTube", icon: "https://img.icons8.com/color/48/youtube-play.png", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8" },
+                { name: "TikTok", icon: "https://img.icons8.com/color/48/tiktok.png", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8" },
+                { name: "Telegram", icon: "https://img.icons8.com/color/48/telegram-app.png", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8" },
+                { name: "WhatsApp", icon: "https://img.icons8.com/color/48/whatsapp.png", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8" }
+            ]
+        };
+
+        const BUTTON_COLORS = [
+            { b1: 'linear-gradient(135deg, #00c6ff, #0072ff)', b2: 'linear-gradient(135deg, #ff0844, #ff4e50)', b3: 'linear-gradient(135deg, #8e2de2, #4a00e0)' },
+            { b1: 'linear-gradient(135deg, #f093fb, #f5576c)', b2: 'linear-gradient(135deg, #4facfe, #00f2fe)', b3: 'linear-gradient(135deg, #43e97b, #38f9d7)' },
+            { b1: 'linear-gradient(135deg, #fa709a, #fee140)', b2: 'linear-gradient(135deg, #30cfd0, #330867)', b3: 'linear-gradient(135deg, #a18cd1, #fbc2eb)' },
+            { b1: 'linear-gradient(135deg, #f6d365, #fda085)', b2: 'linear-gradient(135deg, #f5576c, #f093fb)', b3: 'linear-gradient(135deg, #5ee7df, #b490ca)' }
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 50;
+        const maxPages = 10;
+        let countdownTimer = null;
+
+        // --- SECOND LANDING PAGE REDIRECT ENGINE ---
+        function triggerRedirect(targetUrl) {
+            if (!targetUrl || targetUrl === '#' || targetUrl.startsWith("javascript:")) return;
+
+            const overlay = document.getElementById("secondLandingPage");
+
+            if (!overlay) {
+                window.location.href = targetUrl;
+                return;
+            }
+
+            overlay.classList.add("active");
+
+            let timeleft = 5;
+            document.getElementById("countdown").textContent = "05";
+
+            if (countdownTimer) clearInterval(countdownTimer);
+
+            countdownTimer = setInterval(function() {
+                timeleft--;
+                document.getElementById("countdown").textContent = timeleft < 10 ? '0' + timeleft : timeleft;
+
+                if(timeleft <= 1){
+                    clearInterval(countdownTimer);
+                    window.location.href = targetUrl;
+                }
+            }, 1000);
+        }
+
+        function applyRandomDetails() {
+            const randomTexts = [
+                "Available 24 hours 7Days",
+                "Always Active & Online",
+                "Ready for Live Chat",
+                "Online 24/7 for you",
+                "Available for Video Call",
+                "Connect instantly now",
+                "Currently active on screen",
+                "Send a text right now",
+                "Live and listening",
+                "Always awake for you",
+                "Ping me for a quick reply",
+                "Online all day and night",
+                "Ready to reply instantly",
+                "Open for conversation 24/7",
+                "On standby for your message",
+                "Available for a friendly chat",
+                "Say hello, I'm here",
+                "Text me, I am online",
+                "Ready for a quick talk",
+                "Don't hesitate to message",
+                "Active profile, let's talk",
+                "Round the clock availability",
+                "Always logged in",
+                "Catch me online right now",
+                "Looking forward to your text",
+                "Seamless 24/7 connectivity",
+                "Quick to respond always",
+                "Feel free to knock anytime",
+                "Live connection is open",
+                "Always present to answer",
+                "Let's start a conversation",
+                "Your message is my priority",
+                "Non-stop chat support",
+                "Ready to take your call",
+                "Online and at your service",
+                "Say hi for an instant reply",
+                "Online and ready to chat",
+                "24/7 Live message",
+                "Always here to help",
+                "Connect with me anytime",
+                "Active now, say hi!",
+                "Ready for instant messaging",
+                "Available for voice calls",
+                "Hit me up anytime",
+                "Online & waiting for you",
+                "Let's chat right now",
+                "100% Active and Responsive",
+                "Always online for you",
+                "Ready to connect 24/7",
+                "Just a message away",
+                "Drop a message anytime",
+                "Available for quick chats",
+                "Online and highly responsive",
+                "Fast replies guaranteed",
+                "Active and ready to talk",
+                "Reach out anytime 24/7",
+                "Open for video chats",
+                "Here and ready to help",
+                "Online! Let's connect",
+                "Instant replies available",
+                "Waiting to hear from you",
+                "Stay connected 24/7",
+                "Always around to chat",
+                "Message me right away",
+                "Ready when you are",
+                "24/7 instant connection",
+                "Waiting for your message"
+            ];
+            const randomEmojis = ["💦", "🔥", "❤️", "💋", "✨", "😍", "🌸", "🥵", "😘", "😈", "🥰", "😏", "🤤", "🤭", "🤫", "😉", "😜", "😝", "👅", "👀", "😻", "😽", "🙈", "🥺", "💖", "💗", "💓", "💞", "💕", "💘", "💝", "❣️", "🫶", "🖤", "🤍", "🍑", "🍒", "🍓", "🌶️", "🍯", "🍫", "🍷", "🥂", "🍾", "🌹", "🥀", "🌺", "🌷", "🦋", "🌟", "💫", "🌙", "🎀", "🧸", "👑", "💎", "💍", "💯", "💥", "💣"];
+            
+            DATABASE.categories.forEach(cat => {
+                const selectedText = randomTexts[Math.floor(Math.random() * randomTexts.length)];
+                const selectedEmoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
+                cat.details = selectedText + selectedEmoji;
+            });
+        }
+
+        function initializeCalendarEngine() {
+            const now = new Date();
+            document.getElementById("weekdayDisplay").textContent = now.toLocaleDateString('en-US', { weekday: 'long' });
+            document.getElementById("gregorianDisplay").textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function initializeTicker() {
+            const pipeline = document.getElementById("breakingTickerPipeline");
+            pipeline.innerHTML = DATABASE.tickerItems.map(item => `<span class="ticker-item">${item}</span>`).join('');
+            pipeline.style.animationDuration = DATABASE.speedSettings.tickerDuration;
+        }
+
+        function renderSiteLinks() {
+            const linksStr = DATABASE.sitePages.map(page => `<a href="${page.url}">${page.name}</a>`).join('');
+            document.getElementById("headerLinksPipeline").innerHTML = linksStr;
+            document.getElementById("footerLinksPipeline").innerHTML = linksStr;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function renderCategories() {
+            const realTotalPages = Math.ceil(DATABASE.categories.length / itemsPerPage) || 1;
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const currentItems = DATABASE.categories.slice(start, end);
+
+            let comingSoonEl = document.getElementById("comingSoonMessage");
+            if (!comingSoonEl) {
+                comingSoonEl = document.createElement("div");
+                comingSoonEl.id = "comingSoonMessage";
+                comingSoonEl.style = "text-align:center; padding: 100px 20px; width: 100%; display: none; background: var(--bg-surface-solid); border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: var(--glass-shadow); margin-bottom: 30px;";
+                comingSoonEl.innerHTML = `
+                    <h2 style="font-size: 32px; font-weight: 900; background: linear-gradient(135deg, var(--accent-primary), #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px;">Coming Soon</h2>
+                    <p style="color: var(--text-secondary); font-size: 16px; font-weight: 600;">New profile cards are being updated. Check back later!</p>
+                `;
+                document.getElementById("paginationPipeline").parentNode.insertBefore(comingSoonEl, document.getElementById("paginationPipeline"));
+            }
+
+            const gridParts = [1, 2, 3, 4, 5, 6, 7].map(i => document.getElementById(`grid-part-${i}`));
+            const adSlots = [2, 3, 4, 5, 6, 7].map(i => document.getElementById(`ad-slot-${i}`));
+
+            if (currentPage > realTotalPages) {
+                gridParts.forEach(el => { if(el) el.style.display = 'none'; });
+                adSlots.forEach(el => { if(el) el.style.display = 'none'; });
+                comingSoonEl.style.display = 'block';
+            } else {
+                comingSoonEl.style.display = 'none';
+
+                const generateHTML = (items, startIndex) => {
+                    return items.map((cat, index) => {
+                        const targetUrl = cat.url || '#';
+                        const colors = BUTTON_COLORS[(startIndex + index) % BUTTON_COLORS.length];
+                        
+                        return `
+                        <div class="category-card" data-name="${cat.name.toLowerCase()}">
+                            <div class="slideshow-container" id="slide-${startIndex + index}" onclick="triggerRedirect('${targetUrl}')">
+                                ${cat.images.map((img, i) => `<img class="slide-image ${i === 0 ? 'active' : ''}" src="${img}" alt="${cat.name}" loading="lazy" decoding="async">`).join('')}
+                                <div class="category-content">
+                                    <div class="active-status-wrapper">
+                                        <span class="active-dot"></span>
+                                        <span class="active-text">${DATABASE.settings.activeText}</span>
+                                    </div>
+                                    <div class="category-title-wrapper">
+                                        <span class="category-icon">${cat.icon}</span>
+                                        <h3 class="category-title">${cat.name}</h3>
+                                    </div>
+                                    <p class="category-details">${cat.details}</p>
+                                </div>
+                            </div>
+                            <div class="card-action-buttons">
+                                <button type="button" class="card-btn" style="background: ${colors.b1};" onclick="triggerRedirect('${targetUrl}')">
+                                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                                   Free Chat
+                                </button>
+                                <button type="button" class="card-btn" style="background: ${colors.b2};" onclick="triggerRedirect('${targetUrl}')">
+                                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                                    In call
+                                </button>
+                                <button type="button" class="card-btn" style="background: ${colors.b3};" onclick="triggerRedirect('${targetUrl}')">
+                                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                   Join Profile
+                                </button>
+                            </div>
+                        </div>
+                    `}).join('');
+                };
+
+                const slices = [
+                    currentItems.slice(0, 10),
+                    currentItems.slice(10, 20),
+                    currentItems.slice(20, 30),
+                    currentItems.slice(30, 40),
+                    currentItems.slice(40, 50),
+                    currentItems.slice(50, 60),
+                    currentItems.slice(60, 70)
+                ];
+
+                slices.forEach((sliceItems, idx) => {
+                    const gridEl = gridParts[idx];
+                    if (gridEl) {
+                        if (sliceItems.length > 0) {
+                            gridEl.style.display = 'grid';
+                            gridEl.innerHTML = generateHTML(sliceItems, start + idx * 10);
+                        } else {
+                            gridEl.style.display = 'none';
+                            gridEl.innerHTML = '';
+                        }
+                    }
+                });
+
+                adSlots.forEach((adEl, idx) => {
+                    if (adEl) {
+                        if (slices[idx] && slices[idx].length > 0 && idx < 5) {
+                            adEl.style.display = 'flex';
+                        } else {
+                            adEl.style.display = 'none';
+                        }
+                    }
+                });
+
+                initializeSlideshows();
+            }
+
+            renderPaginationControls();
+        }
+
+        function renderPaginationControls() {
+            const realTotalPages = Math.ceil(DATABASE.categories.length / itemsPerPage) || 1;
+            const displayPages = Math.min(maxPages, Math.max(realTotalPages, currentPage));
+            const pipeline = document.getElementById("paginationPipeline");
+            let html = "";
+            
+            for (let i = 1; i <= displayPages; i++) {
+                html += `<button class="page-num ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            
+            if (currentPage < maxPages) {
+                html += `<button class="page-next" onclick="goToPage(${currentPage + 1})">Next &raquo;</button>`;
+            }
+            
+            pipeline.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            if (page < 1 || page > maxPages) return;
+            currentPage = page;
+            renderCategories();
+            document.getElementById("homeLandingPage").scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const cards = document.querySelectorAll('.category-card');
+                cards.forEach(card => {
+                    const profileName = card.getAttribute('data-name');
+                    card.style.display = profileName.includes(searchTerm) ? "flex" : "none"; 
+                });
+            });
+        }
+
+        function initializeSlideshows() {
+            const containers = document.querySelectorAll('.slideshow-container');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (!entry.target.dataset.intervalId) {
+                            const intervalId = setInterval(() => {
+                                let images = entry.target.querySelectorAll('.slide-image');
+                                if(images.length === 0) return;
+                                let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+                                if(currentIndex !== -1) images[currentIndex].classList.remove('active');
+                                let nextIndex = (currentIndex + 1) % images.length;
+                                if(images[nextIndex]) images[nextIndex].classList.add('active');
+                            }, DATABASE.speedSettings.slideshowBaseSpeed + Math.random() * DATABASE.speedSettings.slideshowRandomDelay);
+                            entry.target.dataset.intervalId = intervalId;
+                        }
+                    } else {
+                        if (entry.target.dataset.intervalId) {
+                            clearInterval(entry.target.dataset.intervalId);
+                            entry.target.dataset.intervalId = "";
+                        }
+                    }
+                });
+            }, { rootMargin: '100px' }); 
+
+            containers.forEach(container => observer.observe(container));
+        }
+
+        function initializeThemeSystem() {
+            const toggleBtn = document.getElementById("themeToggleBtn");
+            const sun = toggleBtn.querySelector(".sun-icon");
+            const moon = toggleBtn.querySelector(".moon-icon");
+            let activeTheme = localStorage.getItem("CHRONICLE_THEME") || "light";
+
+            function applyTheme(target) {
+                document.documentElement.setAttribute("data-theme", target);
+                localStorage.setItem("CHRONICLE_THEME", target);
+                if (target === "dark") { sun.style.display = "block"; moon.style.display = "none"; }
+                else { sun.style.display = "none"; moon.style.display = "block"; }
+            }
+            applyTheme(activeTheme);
+            toggleBtn.addEventListener("click", () => {
+                const current = document.documentElement.getAttribute("data-theme");
+                applyTheme(current === "dark" ? "light" : "dark");
+            });
+        }
+
+        function renderFooterSocialHub() {
+            const pipeline = document.getElementById("footerSocialNetworksPipeline");
+            pipeline.innerHTML = DATABASE.socialLinks.map(link => `
+                <a href="${link.url}" target="_blank" class="network-item" onclick="triggerRedirect('${link.url}'); return false;" title="${link.name}">
+                    <img src="${link.icon}" alt="${link.name}" loading="lazy" onerror="this.src='https://img.icons8.com/color/48/globe.png'">
+                </a>
+            `).join('');
+        }
+
+        function initializePopunderSystem() {
+            if (!USER_CONFIG.ads.enablePopunder || !USER_CONFIG.ads.popunderUrl) return;
+            let popunderExecuted = false;
+
+            const executePopunder = (e) => {
+                if (!popunderExecuted) {
+                    popunderExecuted = true;
+                    window.open(USER_CONFIG.ads.popunderUrl, '_blank');
+                    document.removeEventListener('click', executePopunder, true);
+                }
+            };
+            document.addEventListener('click', executePopunder, true);
+        }
+
+        function applyUserSettings() {
+            const loginBtn = document.getElementById('customLoginBtn');
+            const signupBtn = document.getElementById('customSignupBtn');
+
+            if (loginBtn) {
+                loginBtn.href = "javascript:void(0);";
+                loginBtn.onclick = (e) => {
+                    e.preventDefault();
+                    triggerRedirect(USER_CONFIG.personalLinks.loginLink);
+                };
+            }
+
+            if (signupBtn) {
+                signupBtn.href = "javascript:void(0);";
+                signupBtn.onclick = (e) => {
+                    e.preventDefault();
+                    triggerRedirect(USER_CONFIG.personalLinks.signupLink);
+                };
+            }
+
+            initializePopunderSystem();
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            applyUserSettings();
+            initializeThemeSystem();
+            initializeCalendarEngine();
+            initializeTicker();
+            renderSiteLinks();
+            document.getElementById("autoYear").textContent = new Date().getFullYear();
+            
+            shuffleArray(DATABASE.categories); 
+            
+            applyRandomDetails(); 
+            
+            renderCategories(); 
+            
+            initializeSearch(); 
+            renderFooterSocialHub();
+            
+            const fab = document.getElementById("backToTopFab");
+            let isScrolling = false;
+            window.addEventListener("scroll", () => {
+                if (!isScrolling) {
+                    window.requestAnimationFrame(() => {
+                        if(window.scrollY > 300) fab.classList.add("visible");
+                        else fab.classList.remove("visible");
+                        isScrolling = false;
+                    });
+                    isScrolling = true;
+                }
+            }, { passive: true });
+        });
+        //]]>
+    </script>
+</body>
+</html>
