@@ -9,6 +9,10 @@
     <meta name="keywords" content="news portal, premium aggregator, global news matrix">
     <meta name="robots" content="index, follow">
 
+    <!-- Image Server Preconnect for Faster Loading -->
+    <link rel="preconnect" href="https://i.ibb.co.com">
+    <link rel="dns-prefetch" href="https://i.ibb.co.com">
+
     <!-- TailwindCSS CDN (Preflight disabled to protect your existing custom CSS) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -918,12 +922,7 @@
                 { id: "Eva Quinn", name: "Eva Quinn", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/s9n10y3p/508b32445aa5c25c5adeb3c88515ee58-f.jpg"] },
 
                 { id: "Natalia Hannah", name: "Natalia Hannah", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/SXNfCkQf/defca82911b61bd8f3a4392cb7c7246c-f.jpg"] },
-
-
-
-
-
-                { id: "Mira Stone", name: "Mira Stone", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/Mx2xkrsy/SAVE-20260913-173301.jpg"] },
+{ id: "Mira Stone", name: "Mira Stone", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/Mx2xkrsy/SAVE-20260913-173301.jpg"] },
 
                 { id: "Lila Shaw", name: "Lila Shaw", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/tTMNxVj0/SAVE-20260913-173127.jpg"] },
 
@@ -1039,6 +1038,7 @@
                 { id: "Eliza Thornton", name: "Eliza Thornton", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/Wpz1bQ2F/SAVE-20260913-172815.jpg"] },
 
                 { id: "Alayah Rhodes", name: "Alayah Rhodes", url: "https://www.profitableratecpmnetwork.com/ezm4bzpzia?key=f1bc14f4dfe17cab734c5ecb7558caa8", details: "", icon: "", images: ["https://i.ibb.co.com/pBbVjh9t/SAVE-20260913-172110.jpg"] }
+
 
             ],
 
@@ -1241,7 +1241,7 @@
                         return `
                         <div class="category-card" data-name="${cat.name.toLowerCase()}">
                             <div class="slideshow-container" id="slide-${startIndex + index}" onclick="triggerRedirect('${targetUrl}')">
-                                ${cat.images.map((img, i) => `<img class="slide-image ${i === 0 ? 'active' : ''}" src="${img}" alt="${cat.name}" loading="lazy" decoding="async">`).join('')}
+                                ${cat.images.map((img, i) => `<img class="slide-image ${i === 0 ? 'active' : ''}" src="${img}" alt="${cat.name}" ${i === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} decoding="async">`).join('')}
                                 <div class="category-content">
                                     <div class="active-status-wrapper">
                                         <span class="active-dot"></span>
