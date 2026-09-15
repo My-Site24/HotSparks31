@@ -1130,13 +1130,13 @@
             countdownTimer = setInterval(function() {
                 timeleft--;
                 if (timeleft <= 0) {
-                    if (countdownEl) countdownEl.textContent = "0";
+                    if (countdownEl) countdownEl.textContent = "00";
                     clearInterval(countdownTimer);
                     window.location.href = targetUrl;
                 } else {
                     if (countdownEl) countdownEl.textContent = timeleft < 5 ? '0' + timeleft : timeleft;
                 }
-            }, 1000);
+            }, 900);
         }
 
         // --- BROWSER BACK BUTTON FIX (BFCACHE) ---
