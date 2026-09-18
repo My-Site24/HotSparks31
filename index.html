@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HotSparks | Premium News Matrix & Aggregator</title>
+    <title>HotSparks Conversations Site</title>
     
-    <meta name="description" content="A premium, ultra-responsive dynamic country-wise news and media matrix dashboard.">
-    <meta name="keywords" content="news portal, premium aggregator, global news matrix">
+    <meta name="description" content="A premium HotSparks-18+ Conversations Site, ultra-responsive dynamic country-wise global HotSparks real-time conversations dashboard.">
+    <meta name="keywords" content="global HotSparks real-time Conversations Site">
     <meta name="robots" content="index, follow">
 
     <!-- Image Server Preconnect for Faster Loading -->
@@ -107,7 +107,7 @@
         header {
             position: sticky;
             top: 0;
-            z-index: 99;
+            z-index: 100000; /* Updated: Ensures header stays above the loading overlay */
             margin-bottom: 24px;
             border-bottom: 1px solid var(--border-color);
         }
@@ -153,6 +153,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            cursor: pointer;
         }
 
         /* --- AUTH BUTTONS --- */
@@ -210,12 +211,11 @@
             display: flex;
             align-items: center;
             background: var(--bg-surface-solid);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--accent-primary); 
             border-radius: var(--radius-sm);
             overflow: hidden;
             margin-bottom: 24px;
-            box-shadow: var(--glass-shadow);
-            height: 44px;
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.25), var(--glass-shadow);             height: 44px;
         }
 
         .ticker-title {
@@ -250,13 +250,13 @@
 
         .ticker-item {
             padding-right: 40px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
         }
-        .ticker-item::before { content: "•"; margin-right: 12px; color: #ef4444; font-size: 18px; }
+        .ticker-item::before { content: "•"; margin-right: 14px; color: #ef4444; font-size: 18px; }
 
         @keyframes tickerMove {
             0% { transform: translate3d(0, 0, 0); }
@@ -624,7 +624,7 @@
         }
 
         .disclaimer-desc {
-            font-size: 12px;
+            font-size: 14px;
             margin: 20px 0 30px 0;
             color: #000 !important;
             line-height: 1.5;
@@ -669,7 +669,7 @@
             <div class="header-top">
                 <div class="header-left">
                     <a href="/" class="logo">
-                        <svg style="width:26px; height:26px; fill:var(--accent-primary);" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                        <svg style="width:26px; height:26px; fill:var(--accent-primary);" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                         HotSparks
                     </a>
                     <nav class="header-site-links" id="headerLinksPipeline"></nav>
@@ -702,7 +702,7 @@
     <!-- NEWS TICKER -->
     <div class="container">
         <div class="ticker-wrapper">
-            <div class="ticker-title">LIVE UPDATES</div>
+            <div class="ticker-title">NEWS UPDATES</div>
             <div class="ticker-text-wrapper">
                 <div class="ticker-text-move" id="breakingTickerPipeline"></div>
             </div>
@@ -712,19 +712,16 @@
     <!-- BANNER AD SLOT 1 -->
     <div class="container">
         <div class="ad-container" id="ad-slot-1">
-            <!-- ================================================= -->
-            <!-- 🟢 PLACE YOUR BANNER AD SCRIPT CODE HERE (SLOT 1) 🟢 -->
-            <!-- ================================================= -->
             <script>
-            atOptions = {
-                'key' : '4f93d9ff6744bf412b640d11a9aa15b8',
-                'format' : 'iframe',
-                'height' : 90,
-                'width' : 728,
-                'params' : {}
-            };
-            </script>
-            <script src="https://pl31344697.profitableratecpmnetwork.com/4f93d9ff6744bf412b640d11a9aa15b8/invoke.js"></script>
+  atOptions = {
+    'key' : '5fdc9d178a2ab5a4d324b5c3e070f8c3',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highrevenueformat.com/5fdc9d178a2ab5a4d324b5c3e070f8c3/invoke.js"></script>
         </div>
     </div>
 
@@ -748,9 +745,6 @@
             
             <!-- BANNER AD SLOT 2 -->
             <div class="ad-container" id="ad-slot-2">
-                <!-- ================================================= -->
-                <!-- 🟢 PLACE YOUR BANNER AD SCRIPT CODE HERE (SLOT 2) 🟢 -->
-                <!-- ================================================= -->
                 <script>
                 atOptions = {
                     'key' : '5fdc9d178a2ab5a4d324b5c3e070f8c3',
@@ -767,77 +761,55 @@
             
             <!-- BANNER AD SLOT 3 -->
             <div class="ad-container" id="ad-slot-3">
-                <!-- ================================================= -->
-                <!-- 🟢 PLACE YOUR BANNER AD SCRIPT CODE HERE (SLOT 3) 🟢 -->
-                <!-- ================================================= -->
-                <script>
-                atOptions = {
-                    'key' : '5fdc9d178a2ab5a4d324b5c3e070f8c3',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-                </script>
-                <script src="https://www.highrevenueformat.com/5fdc9d178a2ab5a4d324b5c3e070f8c3/invoke.js"></script>
+                <script async="async" data-cfasync="false" src="https://pl31344697.profitableratecpmnetwork.com/4f93d9ff6744bf412b640d11a9aa15b8/invoke.js"></script>
             </div>
 
             <div class="category-grid" id="grid-part-3"></div>
 
+
+
             <!-- BANNER AD SLOT 4 -->
             <div class="ad-container" id="ad-slot-4">
-                <!-- ================================================= -->
-                <!-- 🟢 PLACE YOUR BANNER AD SCRIPT CODE HERE (SLOT 4) 🟢 -->
-                <!-- ================================================= -->
                 <script async="async" data-cfasync="false" src="https://pl28837871.effectivecpmnetwork.com/a42710cbc275532005aa72c80ea3aa31/invoke.js"></script>
                 <div id="container-a42710cbc275532005aa72c80ea3aa31"></div>
             </div>
 
             <div class="category-grid" id="grid-part-4"></div>
             
+
+
             <!-- BANNER AD SLOT 5 -->
             <div class="ad-container" id="ad-slot-5">
-                <!-- ================================================= -->
-                <!-- 🟢 PLACE YOUR BANNER AD SCRIPT CODE HERE (SLOT 5) 🟢 -->
-                <!-- ================================================= -->
                 <script>
-                atOptions = {
-                    'key' : '5fdc9d178a2ab5a4d324b5c3e070f8c3',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-                </script>
-                <script src="https://www.highrevenueformat.com/5fdc9d178a2ab5a4d324b5c3e070f8c3/invoke.js"></script>
+  atOptions = {
+    'key' : '27b3e309b94bccd3b1dec60ef2bcaa1b',
+    'format' : 'iframe',
+    'height' : 60,
+    'width' : 468,
+    'params' : {}
+  };
+</script>
+<script src="https://www.highrevenueformat.com/27b3e309b94bccd3b1dec60ef2bcaa1b/invoke.js"></script>
             </div>
 
             <div class="category-grid" id="grid-part-5"></div>
             
+
+
+
+
             <!-- BANNER AD SLOT 6 -->
             <div class="ad-container" id="ad-slot-6">
-                <!-- ================================================= -->
-                <!-- 🟢 PLACE YOUR BANNER AD SCRIPT CODE HERE (SLOT 6) 🟢 -->
-                <!-- ================================================= -->
-                <script>
-                atOptions = {
-                    'key' : '5fdc9d178a2ab5a4d324b5c3e070f8c3',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-                </script>
-                <script src="https://www.highrevenueformat.com/5fdc9d178a2ab5a4d324b5c3e070f8c3/invoke.js"></script>
+                <script async="async" data-cfasync="false" src="https://pl31344697.profitableratecpmnetwork.com/4f93d9ff6744bf412b640d11a9aa15b8/invoke.js"></script>
             </div>
 
             <div class="category-grid" id="grid-part-6"></div>
 
+
+
+
             <!-- BANNER AD SLOT 7 -->
             <div class="ad-container" id="ad-slot-7">
-                <!-- ================================================= -->
-                <!-- 🟢 PLACE YOUR BANNER AD SCRIPT CODE HERE (SLOT 7) 🟢 -->
-                <!-- ================================================= -->
                 <script>
                 atOptions = {
                     'key' : '5fdc9d178a2ab5a4d324b5c3e070f8c3',
@@ -866,14 +838,14 @@
 
             <!-- DESCRIPTION -->
             <div class="disclaimer-desc">
-               * This verified profile guarantees a 100% secure and risk-free environment for authentic connections.
-* Engage confidently in private, real-time conversations with complete absolute peace of mind.
+               * This verified profile guarantees a 100% secure and risk-free environment for authentic connections.<br>
+               * Engage confidently in private, real-time conversations with complete absolute peace of mind.
             </div>
 
             <!-- LOADER -->
             <div class="spinner"></div>
 
-            <h2>Preparing...</h2>
+            <h2 id="dynamicStatus">Preparing...</h2>
 
             <p>👉🏽 In This Only <span id="countdown">05</span> Seconds.</p>
 
@@ -884,7 +856,7 @@
     <footer class="footer-wrapper">
         <div class="container footer-container">
             <div class="footer-left">
-                <p>Copyright &copy; <span id="autoYear"></span> | <a href="javascript:void(0)" onclick="triggerRedirect('https://www.profitableratecpmnetwork.com/gnebcryj?key=04eaae2c30e8b18fc3bd7ea7ffbf4198')" style="color:var(--accent-primary); font-weight: bold; cursor: pointer;">HotSparks❤️</a> All Rights Reserved.</p>
+                <p>Copyright &copy; <span id="autoYear"></span> | <a href="javascript:void(0)" onclick="triggerRedirect('https://www.profitableratecpmnetwork.com/gnebcryj?key=04eaae2c30e8b18fc3bd7ea7ffbf4198', 'default')" style="color:var(--accent-primary); font-weight: bold; cursor: pointer;">HotSparks❤️</a> All Rights Reserved.</p>
             </div>
             <div class="footer-right-hub">
                 <span class="hub-title">Quick Connected Networks</span>
@@ -1075,7 +1047,6 @@
 
                 { id: "Alayah Rhodes", name: "Alayah Rhodes", url: "https://www.profitableratecpmnetwork.com/gnebcryj?key=04eaae2c30e8b18fc3bd7ea7ffbf4198", details: "", icon: "", images: ["https://i.ibb.co.com/pBbVjh9t/SAVE-20260913-172110.jpg"] }
 
-
             ],
 
             tickerItems: [
@@ -1108,8 +1079,8 @@
         const maxPages = 10;
         let countdownTimer = null;
 
-        // --- SECOND LANDING PAGE REDIRECT ENGINE ---
-        function triggerRedirect(targetUrl) {
+        // --- SECOND LANDING PAGE REDIRECT ENGINE (UPDATED FOR DYNAMIC CONTENT) ---
+        function triggerRedirect(targetUrl, actionType = 'default') {
             if (!targetUrl || targetUrl === '#' || targetUrl.startsWith("javascript:")) return;
 
             const overlay = document.getElementById("secondLandingPage");
@@ -1119,28 +1090,63 @@
                 return;
             }
 
+            // Update Dynamic Content based on clicked button
+            const titleEl = overlay.querySelector('.header-title');
+            const descEl = overlay.querySelector('.disclaimer-desc');
+            const statusEl = document.getElementById('dynamicStatus');
+
+            if (actionType === 'freeChat') {
+                titleEl.textContent = "Free Chat";
+                descEl.innerHTML = "*End-to-end encrypted chat Conversations.<br>* Please wait while we connect you to the live free chat .";
+                statusEl.textContent = "Connecting...";
+
+            } else if (actionType === 'inCall') {
+                titleEl.textContent = "In Call";
+                descEl.innerHTML = "* High-quality secure voice connection.<br>* Ensure your microphone  permissions are ready.";
+                statusEl.textContent = "Connecting...";
+
+            } else if (actionType === 'VewProfile') {
+                titleEl.textContent = "Vew This Profile";
+                descEl.innerHTML = "* Fetching profile details, private gallery and recent updates.<br>* 100% verified and Enjoy exclusive updates and private interactions.";
+                statusEl.textContent = "Loading Profile Details...";
+
+            } else if (actionType === 'ViewProfile') {
+                titleEl.textContent = "Vew This Profile";
+                descEl.innerHTML = "* Fetching profile details, private gallery and recent updates.<br>* 100% verified and Enjoy exclusive updates and private interactions.";
+                statusEl.textContent = "Loading Profile Details...";
+
+            } else {
+                titleEl.textContent = "Welcome To HotSparks!";
+                descEl.innerHTML = "* This verified profile guarantees a 100% secure and risk-free environment.<br>* Engage confidently in private, real-time conversations.";
+                statusEl.textContent = "Preparing...";
+
+            }
+
             overlay.classList.add("active");
 
-            let timeleft = 5;
             const countdownEl = document.getElementById("countdown");
             if (countdownEl) countdownEl.textContent = "05";
 
+            const duration = 5; // ৫ সেকেন্ডের কাউন্টডাউন
+            let startTime = Date.now();
+            
             if (countdownTimer) clearInterval(countdownTimer);
 
             countdownTimer = setInterval(function() {
-                timeleft--;
+                let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                let timeleft = duration - elapsedTime;
+
                 if (timeleft <= 0) {
                     if (countdownEl) countdownEl.textContent = "00";
                     clearInterval(countdownTimer);
                     window.location.href = targetUrl;
                 } else {
-                    if (countdownEl) countdownEl.textContent = timeleft < 5 ? '0' + timeleft : timeleft;
+                    if (countdownEl) countdownEl.textContent = timeleft < 10 ? '0' + timeleft : timeleft;
                 }
-            }, 900);
+            }, 100);
         }
 
         // --- BROWSER BACK BUTTON FIX (BFCACHE) ---
-        // This listens if the page is loaded from cache (like when pressing back button)
         window.addEventListener('pageshow', function(event) {
             const overlay = document.getElementById("secondLandingPage");
             if (overlay && overlay.classList.contains("active")) {
@@ -1289,7 +1295,7 @@
                         
                         return `
                         <div class="category-card" data-name="${cat.name.toLowerCase()}">
-                            <div class="slideshow-container" id="slide-${startIndex + index}" onclick="triggerRedirect('${targetUrl}')">
+                            <div class="slideshow-container" id="slide-${startIndex + index}" onclick="triggerRedirect('${targetUrl}', 'viewProfile')">
                                 ${cat.images.map((img, i) => `<img class="slide-image ${i === 0 ? 'active' : ''}" src="${img}" alt="${cat.name}" ${i === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} decoding="async">`).join('')}
                                 <div class="category-content">
                                     <div class="active-status-wrapper">
@@ -1304,17 +1310,17 @@
                                 </div>
                             </div>
                             <div class="card-action-buttons">
-                                <button type="button" class="card-btn" style="background: ${colors.b1};" onclick="triggerRedirect('${targetUrl}')">
+                                <button type="button" class="card-btn" style="background: ${colors.b1};" onclick="triggerRedirect('${targetUrl}', 'freeChat')">
                                     <svg viewBox="0 0 24 24"><path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
                                    Free Chat
                                 </button>
-                                <button type="button" class="card-btn" style="background: ${colors.b2};" onclick="triggerRedirect('${targetUrl}')">
-                                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-                                    In call
-                                </button>
-                                <button type="button" class="card-btn" style="background: ${colors.b3};" onclick="triggerRedirect('${targetUrl}')">
+                                <button type="button" class="card-btn" style="background: ${colors.b2};" onclick="triggerRedirect('${targetUrl}', 'inCall')">
+    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+    In call
+</button>
+                                <button type="button" class="card-btn" style="background: ${colors.b3};" onclick="triggerRedirect('${targetUrl}', 'VewProfile')">
                                     <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                                   Join Profile
+                                   View Profile
                                 </button>
                             </div>
                         </div>
@@ -1429,7 +1435,8 @@
             const toggleBtn = document.getElementById("themeToggleBtn");
             const sun = toggleBtn.querySelector(".sun-icon");
             const moon = toggleBtn.querySelector(".moon-icon");
-            let activeTheme = localStorage.getItem("CHRONICLE_THEME") || "light";
+            localStorage.removeItem("CHRONICLE_THEME");
+let activeTheme = "dark";
 
             function applyTheme(target) {
                 document.documentElement.setAttribute("data-theme", target);
@@ -1447,7 +1454,7 @@
         function renderFooterSocialHub() {
             const pipeline = document.getElementById("footerSocialNetworksPipeline");
             pipeline.innerHTML = DATABASE.socialLinks.map(link => `
-                <a href="${link.url}" target="_blank" class="network-item" onclick="triggerRedirect('${link.url}'); return false;" title="${link.name}">
+                <a href="${link.url}" target="_blank" class="network-item" onclick="triggerRedirect('${link.url}', 'default'); return false;" title="${link.name}">
                     <img src="${link.icon}" alt="${link.name}" loading="lazy" onerror="this.src='https://img.icons8.com/color/48/globe.png'">
                 </a>
             `).join('');
@@ -1472,19 +1479,13 @@
             const signupBtn = document.getElementById('customSignupBtn');
 
             if (loginBtn) {
-                loginBtn.href = "javascript:void(0);";
-                loginBtn.onclick = (e) => {
-                    e.preventDefault();
-                    triggerRedirect(USER_CONFIG.personalLinks.loginLink);
-                };
+                loginBtn.href = USER_CONFIG.personalLinks.loginLink;
+                loginBtn.onclick = null;
             }
 
             if (signupBtn) {
-                signupBtn.href = "javascript:void(0);";
-                signupBtn.onclick = (e) => {
-                    e.preventDefault();
-                    triggerRedirect(USER_CONFIG.personalLinks.signupLink);
-                };
+                signupBtn.href = USER_CONFIG.personalLinks.signupLink;
+                signupBtn.onclick = null;
             }
 
             initializePopunderSystem();
@@ -1528,6 +1529,5 @@
     <!-- (These scripts usually run in the background or as overlays)   -->
     <!-- ============================================================== -->
     <script src="https://pl31344696.profitableratecpmnetwork.com/4c/3f/6f/4c3f6fb5039e94ed3e4c305915510f6e.js"></script>
-
 </body>
 </html>
