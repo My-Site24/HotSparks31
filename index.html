@@ -1131,27 +1131,27 @@
             const statusEl = document.getElementById('dynamicStatus');
 
             if (actionType === 'freeChat') {
-                titleEl.textContent = "Free Chat";
+                titleEl.textContent = "💬Free Chat";
                 descEl.innerHTML = "*End-to-end encrypted chat Conversations.<br>* Please wait while we connect you to the live free chat .";
-                statusEl.textContent = "Connecting...";
+                statusEl.textContent = "💬Connecting...";
 
             } else if (actionType === 'inCall') {
-                titleEl.textContent = "In Call";
+                titleEl.textContent = "📞In Call";
                 descEl.innerHTML = "* High-quality secure voice connection.<br>* Ensure your microphone  permissions are ready.";
-                statusEl.textContent = "Connecting...";
+                statusEl.textContent = "📞Connecting...";
 
             } else if (actionType === 'VewProfile') {
-                titleEl.textContent = "Vew This Profile";
+                titleEl.textContent = "💋Vew This Profile";
                 descEl.innerHTML = "* Fetching profile details, private gallery and recent updates.<br>* 100% verified and Enjoy exclusive updates and private interactions.";
-                statusEl.textContent = "Loading Profile Details...";
+                statusEl.textContent = "💋Profile Details...";
 
             } else if (actionType === 'ViewProfile') {
-                titleEl.textContent = "Vew This Profile";
+                titleEl.textContent = "💋Vew This Profile";
                 descEl.innerHTML = "* Fetching profile details, private gallery and recent updates.<br>* 100% verified and Enjoy exclusive updates and private interactions.";
-                statusEl.textContent = "Loading Profile Details...";
+                statusEl.textContent = "💋Profile Details...";
 
             } else if (actionType === 'HotSparks') {
-                titleEl.textContent = "Welcome To HotSparks!";
+                titleEl.textContent = "🏠Welcome To HotSparks!";
                 descEl.innerHTML = "* This verified profile guarantees a 100% secure and risk-free environment.<br>* Engage confidently in private, real-time conversations.";
                 statusEl.textContent = "Preparing...";
 
@@ -1330,7 +1330,7 @@
                         
                         return `
                         <div class="category-card" data-name="${cat.name.toLowerCase()}">
-                            <div class="slideshow-container" id="slide-${startIndex + index}" onclick="triggerRedirect('${targetUrl}', 'viewProfile')">
+                            <div class="slideshow-container" id="slide-${startIndex + index}" onclick="window.location.href='${targetUrl}'">
                                 ${cat.images.map((img, i) => `<img class="slide-image ${i === 0 ? 'active' : ''}" src="${img}" alt="${cat.name}" ${i === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'} decoding="async">`).join('')}
                                 <div class="category-content">
                                     <div class="active-status-wrapper">
